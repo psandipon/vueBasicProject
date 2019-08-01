@@ -10,7 +10,8 @@
         <span class="font-weight-light subheading">all crazy nutrition facts</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn @click="goHome()" class="grey darken-3 white--text">Home</v-btn>
+      <v-btn @click="goDesserts()" class="grey darken-3 white--text">desserts</v-btn>
+      <v-btn @click="goUsers()" class="grey darken-3 white--text">users</v-btn>
       <v-btn @click="goAbout()" class="grey darken-3 white--text">About</v-btn>
       <v-divider class="mx-4" vertical ></v-divider>
       <v-btn @click="signOut()" class="grey darken-3 white--text">
@@ -37,8 +38,11 @@ export default {
     navDrawer
   },
   methods: {
-    goHome() {
-      this.$router.push("/home");
+    goUsers() {
+      this.$router.push("/users");
+    },
+    goDesserts() {
+      this.$router.push("/desserts");
     },
     goAbout() {
       this.$router.push("/about");

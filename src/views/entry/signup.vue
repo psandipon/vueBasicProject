@@ -2,11 +2,12 @@
   <v-app id="inspire">
     <v-content>
       <snackbar :snackbar.sync="snackbar" :text="text" :color="color"> </snackbar>
-      <!-- {{this.$store.getters.getLoggedIn}} -->
-      <v-container style="background: #424242"  fluid fill-height>
+      
+      <v-container style="background: #757575" fluid fill-height>
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4>
-            <v-card flat  class="elevation-12">
+            
+            <v-card flat class="elevation-12">
               <v-img
                 src="https://picsum.photos/620/300?random"
                 gradient="to bottom, rgba(100,115,201,.1), rgba(0,0,0,.99)"
@@ -14,10 +15,11 @@
                 <v-container fluid fill-height>
                   <v-layout mt-5 align-center column justify-center>
                     <v-avatar size="80">
-                      <v-icon x-large color="white"> face </v-icon>
+                      <v-icon x-large color="white"> assignment_ind </v-icon>
                     </v-avatar>
-                    <h1 class="white--text display-2 font-weight-thin mb-3">Login</h1>
-                    <h4 class="white--text subheading">you must login</h4>
+                   
+                    <h1 class="white--text display-2 font-weight-thin mb-3">Signup</h1>
+                    <h4 class="white--text subheading">you must signup</h4>
                   </v-layout>
                 </v-container>
               </v-img>
@@ -45,13 +47,13 @@
               </v-card-text>
               <v-card-actions>
                 <v-layout column>
-                <v-btn @click="login()"  class="mx-5" color="black white--text">Login</v-btn>
-                 <loader   :loader.sync="loader"> </loader>
-                <v-btn @click="goSignUp()" small  flat color="black white--text">New user ? Please SignUp</v-btn>
+                <v-btn @click="signUp()" round class="mx-5" color="black white--text">sign up</v-btn>
+                 <loader  :loader.sync="loader"> </loader>
+                 <v-btn @click="goLogIn()" small  flat color="black white--text">Alredy a user ? Please LogIn</v-btn>
                 </v-layout>
               </v-card-actions>
             </v-card>
-            
+           
           </v-flex>
         </v-layout>
       </v-container>
@@ -60,9 +62,10 @@
 </template>
 
 <script>
-import firebase from "firebase";
-import snackbar from "../layout/snackbar"
-import loader from "../layout/loader"
+import firebase from "@/plugins/firebase";
+import loader from "@/layout/loader"
+import snackbar from "@/layout/snackbar"
+// import loader from "../../layout/loader"
 
 export default {
   props: {
@@ -82,34 +85,37 @@ export default {
     };
   },
   methods: {
-    login() {
+    signUp() {
       var self = this
-      console.log("login method called")
+      // console.log("login method called")
       self.loader = true
-      this.$store.dispatch("authenticateUser", this.user)
+      this.$store.dispatch("createNewUser", this.user )
       .then(
-        function(result) {  
+        function(result) { 
+          // console.log( "getter >", this.$store.getters.getLoggedIn) ; 
             self.snackbar =  true ;
             self.loader = false ;
-            self.text = result + " You have been successfully logged in." ;
+            self.text = result+" Now you will be redirected to the login page" ;
             self.color= "success"
-            setTimeout(function(){ self.$router.push("/home"); }, 2500);
+            // setSnackbar();
+            setTimeout(function(){ self.$router.push("/"); }, 3000);
+            
           },
         function(error) { 
+          // console.log( "getter >", this.$store.getters.getLoggedIn) ; 
           self.snackbar =  true ;
           self.loader = false ;
           self.text = error ;
           self.color= "error" ;
-          self.unsetSnackbar(self);
+          
           }
       );
       
     },
-    goSignUp(){
-      this.$router.push("/signup");
+    goLogIn(){
+      this.$router.push("/");
     },
+
   }
 };
 </script>
-
-

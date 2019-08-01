@@ -1,16 +1,17 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./views/Home.vue";
+import desserts from "./views/pages/desserts.vue";
+import users from "./views/pages/users.vue";
 import ToolBar from './layout/toolbar.vue';
-import About from './views/About.vue';
-import login from './views/login.vue';
-import signup from './views/signup.vue';
+import about from './views/pages/about.vue';
+import login from './views/entry/login.vue';
+import signup from './views/entry/signup.vue';
 
 Vue.use(Router);
 
 const router = new Router({
   mode: "history",
-  //base: process.env.BASE_URL,
+  
   routes: [
     {
       path: '/', component: login, name: 'login'
@@ -19,29 +20,37 @@ const router = new Router({
       path: '/signup', component: signup, name: 'signup'
     },
     {
-      path: '/home',
+      path: '/',
       component: ToolBar,
       children: [
-        {
-          path: '/', component: Home,
+        { 
+          path: 'desserts', component: desserts, meta: {loggedIn: true}
+        },
+        { 
+          path: 'users', component: users, meta: {loggedIn: true}
+        },
+        { 
+          path: 'about', component: about, meta: {loggedIn: true}
         },
       ],
-      meta: {
-        loggedIn: true
-      }
     },
-    {
-      path: '/about',
-      component: ToolBar,
-      children: [{ path: '/', component: About },
-      ],
-      meta: {
-        loggedIn: true
-      }
-    },
+    
   ]
 });
 
-
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.loggedIn)) {
+    if ((localStorage.getItem("loggedIn")).length == 5) {
+      next({
+        path: '/',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next() // make sure to always call next()!
+  }
+})
 
 export default router

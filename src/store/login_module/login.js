@@ -66,11 +66,11 @@ const actions = {
           console.log("---->",user.user.uid) ;
           commit("SET_LOGGED_IN");
           commit("SET_AUTH_USER", 
-          {
-            user_id: user.user.uid,
-            password: authUser.email,
-            email: authUser.password,
-          }
+            {
+              user_id: user.user.uid,
+              password: authUser.email,
+              email: authUser.password,
+            }
           );
           localStorage.setItem("loggedIn", true) ;
           resolve("connected");
@@ -78,10 +78,7 @@ const actions = {
       )
       .catch(
           function(err) {
-            // commit("UNSET_LOGGED_IN");
-            // commit("UNSET_AUTH_USER");
             reject(err.message);
-            // localStorage.setItem("loggedIn", false) ;
           }
       );
       
@@ -89,9 +86,7 @@ const actions = {
   },
   logout({commit,state}){
     return new Promise ((resolve)=>{
-      console.log("loggedIn",state.loggedIn);
       commit("UNSET_LOGGED_IN");
-      console.log("loggedIn",state.loggedIn);
       commit("UNSET_AUTH_USER");
       localStorage.setItem("loggedIn", false) ;
       resolve() ;

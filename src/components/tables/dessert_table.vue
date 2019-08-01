@@ -66,7 +66,7 @@
   </div>
 </template>
 <script>
-import myForm from "./forms/myForm";
+import myForm from "../forms/myForm";
 export default {
   components: {
     myForm

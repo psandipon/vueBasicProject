@@ -37,7 +37,8 @@ export default {
   data() {
     return {
       items: [
-        { title: "Home", icon: "dashboard" },
+        { title: "Desserts", icon: "dashboard" },
+        { title: "User", icon: "face" },
         { title: "About", icon: "question_answer" }
       ],
       right: null
@@ -45,10 +46,28 @@ export default {
   },
   methods: {
     goTo(item){
-       (item.title == "Home") ? this.goHome() :  this.goAbout() ;
+      console.log("->>>>..",item);
+      switch((item.title)) {
+          case "Desserts":
+            this.goDesserts()
+            break;
+          case "User":
+            this.goUsers()
+            break;
+          case "About":
+            this.goAbout()
+            break;
+          default:
+            this.goAbout()
+        }
+
+      //  (item.title == "Home") ? this.goHome() :  this.goAbout() ;
     },
-    goHome() {
-      this.$router.push("/home");
+    goDesserts() {
+      this.$router.push("/desserts");
+    },
+    goUsers() {
+      this.$router.push("/users");
     },
     goAbout() {
       this.$router.push("/about");

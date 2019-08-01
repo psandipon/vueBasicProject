@@ -2,18 +2,18 @@
   <div  class="about mt-5">
    <v-card class="mx-5">
      <v-card-text> 
-      <myTable> </myTable>
+      <dessertTable> </dessertTable>
      </v-card-text>
    </v-card>
   </div>
 </template>
 
 <script>
-import myTable from "../components/my_table";
+import dessertTable from "@/components/tables/dessert_table";
 
 export default {
   components: {
-    myTable,
+    dessertTable,
     }
 };
 </script>

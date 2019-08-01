@@ -25,3 +25,9 @@ export const DELETE_DESERTS_ITEM = "DELETE_DESERTS_ITEM";
 export const SAVE_DESERTS_ITEM = "SAVE_DESERTS_ITEM";
 export const EDIT_DESERTS_ITEM = "EDIT_DESERTS_ITEM";
 
+//------------ User Table Name dessert info  -------------
+export const SET_USER = "SET_USER";
+export const SET_USERS = "SET_USERS";
+export const UNSET_USER = "UNSET_USER";
+export const UNSET_USERS = "UNSET_USERS";
+
