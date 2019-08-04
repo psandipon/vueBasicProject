@@ -1,8 +1,9 @@
 <template>
   <div>
-    <navDrawer :drawer.sync="drawer"></navDrawer>
+    <navDrawer :drawer="drawer" @changedrawer="changedrawer"></navDrawer>
+    <!-- <navDrawer :nabBar="drawer"></navDrawer> -->
     <v-toolbar>
-      <v-toolbar-side-icon @click="drawerToggle"></v-toolbar-side-icon>
+      <v-toolbar-side-icon @click="drawerTrue"></v-toolbar-side-icon>
       <v-toolbar-title class="headline text-uppercase">
         <span>
           <v-icon large>cake</v-icon>Desserts
@@ -38,6 +39,9 @@ export default {
     navDrawer
   },
   methods: {
+    changedrawer(val){
+      this.drawer = val
+    },
     goUsers() {
       this.$router.push("/users");
     },
@@ -47,9 +51,11 @@ export default {
     goAbout() {
       this.$router.push("/about");
     },
+    drawerTrue() {
+      this.drawer = true;
+    },
     drawerToggle() {
       this.drawer = !this.drawer;
-      console.log(this.drawer);
     },
     signOut(){
       this.$store.dispatch("logout")

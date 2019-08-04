@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navigation-drawer v-model="drawer" absolute dark temporary>
+    <v-navigation-drawer v-model="mydrawer" absolute dark temporary>
       <v-toolbar flat>
         <v-list>
           <v-list-tile>
@@ -14,15 +14,12 @@
           </v-list-tile>
         </v-list>
       </v-toolbar>
-
       <v-divider></v-divider>
-
       <v-list dense class="pt-0">
         <v-list-tile v-for="item in items" :key="item.title" @click=goTo(item)>
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
-
           <v-list-tile-content>
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
           </v-list-tile-content>
@@ -36,14 +33,17 @@ export default {
   props: ["drawer"],
   data() {
     return {
+      mydrawer: false,
       items: [
         { title: "Desserts", icon: "dashboard" },
         { title: "User", icon: "face" },
         { title: "About", icon: "question_answer" }
       ],
-      right: null
+      right: null,
+      navBarModel:true 
     };
   },
+
   methods: {
     goTo(item){
       console.log("->>>>..",item);
@@ -61,7 +61,6 @@ export default {
             this.goAbout()
         }
 
-      //  (item.title == "Home") ? this.goHome() :  this.goAbout() ;
     },
     goDesserts() {
       this.$router.push("/desserts");
@@ -73,9 +72,13 @@ export default {
       this.$router.push("/about");
     },
   },
+
   watch: {
+    mydrawer(val){
+      this.$emit("changedrawer",val)
+    },
     drawer(val) {
-      this.$emit("update:drawer", val);
+      this.mydrawer = val
     }
   }
 };

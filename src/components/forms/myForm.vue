@@ -2,13 +2,13 @@
   <div>
    
     <v-layout row justify-center>
-      <v-dialog v-model="dialog" persistent max-width="600px">
+      <v-dialog v-model="formdialog" persistent max-width="600px">
         <v-card>
           <v-card dark>
             <v-card-title>
                 <span class="headline text-uppercase">{{getTitle()}}</span>
                 <v-spacer></v-spacer>
-                <v-btn fab class="ma-0 pa-0 elevation-5" small color="white black--text " @click="dialog = false">
+                <v-btn fab class="ma-0 pa-0 elevation-5" small color="white black--text " @click="formdialog = false">
                   <v-icon medium >close</v-icon> 
                 </v-btn>
             </v-card-title>
@@ -56,7 +56,7 @@ export default {
 
   data() {
     return {
-      // dialog: false
+       formdialog: false
     };
   },
   methods: {
@@ -83,8 +83,11 @@ export default {
   },
   watch: {
     dialog(val) {
-      // console.log(val)
-      this.$emit("update:dialog", val);
+      // this.$emit("update:dialog", val);
+      this.formdialog =  this.dialog
+    },
+    formdialog(val){
+      this.$emit("updateformdialog",val)
     }
   }
 };

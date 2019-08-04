@@ -29,7 +29,7 @@
             </v-card-actions>
           </v-card>
 
-          <myForm :index="index" :item="dessert" :dialog.sync="dialog"></myForm>
+          <myForm :index="index" :item="dessert" :dialog="dialog" @updateformdialog="updatedialog"></myForm>
         </v-layout>
       </v-card>
       <v-layout column>
@@ -119,6 +119,9 @@ export default {
     }
   },
   methods: {
+    updatedialog(val){
+      this.dialog = val
+    },
     addNewItem() {
       this.index = -1;
       this.dessert = Object.assign({}, this.$store.getters.getDessert);
