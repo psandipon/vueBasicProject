@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import firebase from "@/plugins/firebase";
+// import firebase from "@/plugins/firebase";
 import loader from "@/layout/loader"
 import snackbar from "@/layout/snackbar"
 // import loader from "../../layout/loader"

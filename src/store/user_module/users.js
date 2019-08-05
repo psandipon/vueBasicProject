@@ -66,16 +66,9 @@ const actions = {
     return new Promise((resolve, reject) => {
       Axios.get(Users_FetchUrl)
         .then(function(response) {
-          
-          if (response.data.status == "success") {
-            commit("SET_USERS", response.data.data);
-            
+          console.log("my response: ",response);
+            commit("SET_USERS", response.data);
             resolve();
-          } else {
-            //toastMessage('negative', failedMsg)
-            // commit("SET_MESSAGE", response.data.msg);
-            reject();
-          }
         })
         .catch(function(error) {
           console.log(error);

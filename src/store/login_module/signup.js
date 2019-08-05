@@ -1,5 +1,5 @@
 import Axios from "axios";
-import firebase from "firebase";
+import {fb} from "@/plugins/firebase";
 
 import {
   SET_LOGGED_IN,
@@ -32,7 +32,7 @@ const actions = {
     console.log('in createNewUser',newUser)
 
     return new Promise((resolve, reject) => {
-      firebase
+      fb
       .auth()
       .createUserWithEmailAndPassword(newUser.email, newUser.password)
       .then(

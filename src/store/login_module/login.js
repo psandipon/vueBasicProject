@@ -1,5 +1,5 @@
 import Axios from "axios";
-import firebase from "firebase";
+import {fb} from "@/plugins/firebase";
 
 import {
   SET_LOGGED_IN,
@@ -41,6 +41,8 @@ const mutations = {
     state.loggedIn = false;
   },
   [SET_AUTH_USER](state, authuser) {
+    console.log("came",authuser)
+    console.log("state",state.authUser)
     state.authUser = authuser;
   },
   [UNSET_AUTH_USER](state) {
@@ -58,7 +60,7 @@ const actions = {
   authenticateUser({ commit },  authUser ) {
     console.log('in authenticateUser')
     return new Promise((resolve, reject) => {
-      firebase
+      fb
       .auth()
       .signInWithEmailAndPassword(authUser.email, authUser.password)
       .then(
@@ -68,8 +70,8 @@ const actions = {
           commit("SET_AUTH_USER", 
             {
               user_id: user.user.uid,
-              password: authUser.email,
-              email: authUser.password,
+              password: authUser.password,
+              email: authUser.email,
             }
           );
           localStorage.setItem("loggedIn", true) ;
