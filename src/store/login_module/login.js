@@ -75,6 +75,7 @@ const actions = {
             }
           );
           localStorage.setItem("loggedIn", true) ;
+          localStorage.setItem("userEmail",authUser.email);
           resolve("connected");
         },
       )

@@ -1,33 +1,39 @@
 <template>
-<div>
-  <div class="about mt-5">
-   <v-card class="mx-5">
-     <v-card-text> 
-      <userTable> </userTable>
-     </v-card-text>
-   </v-card>
-  </div>
-
-  <chat> </chat>
+  <div>
+    
+    <div class="about mt-5">
+      <v-card class="mx-5">
+        <v-card-text>
+          <userTable></userTable>
+        </v-card-text>
+      </v-card>
+    </div>
+    
+     
+    
    
-  
-</div>
+    
+
+  </div>
 </template>
 
 <script>
 import userTable from "@/components/tables/user_table";
-import chat from "@/components/chat/private-chat.vue";
+
 
 export default {
+  data() {
+    return {
+      sheet: false
+    };
+  },
   components: {
     userTable,
-    chat
-    }
+    
+  }
 };
 </script>
 <style scoped>
-
- 
 
 </style>
 

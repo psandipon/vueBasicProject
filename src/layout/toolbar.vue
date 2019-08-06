@@ -24,19 +24,27 @@
       <router-view></router-view>
     </v-content>
 
+     <v-btn fab dark fixed right bottom @click="dialog=!dialog" >
+        <v-icon>chat</v-icon>
+      </v-btn>
+    <chat :dialog.sync="dialog" ></chat>
+
   </div>
 </template>
 
 <script>
 import navDrawer from "./navDrawer";
+import chat from "@/components/chat/chat.vue";
 export default {
   data() {
     return {
-      drawer: false
+      drawer: false,
+      dialog: false ,
     };
   },
   components: {
-    navDrawer
+    navDrawer,
+    chat
   },
   methods: {
     changedrawer(val){
