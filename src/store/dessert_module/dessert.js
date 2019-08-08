@@ -170,8 +170,17 @@ const mutations = {
 // Actions
 const actions = {
   deleteItemAction({ commit }, item) {
-    console.log('in deleteItemAction')
-    commit('DELETE_DESERTS_ITEM', item)
+
+   
+
+    return new Promise(function(resolve, reject) {
+      // console.log('in deleteItemAction')
+      commit('DELETE_DESERTS_ITEM', item)
+      resolve();
+    });
+
+
+
   },
   saveItemAction({ commit }, item) {
     commit('SAVE_DESERTS_ITEM', item)

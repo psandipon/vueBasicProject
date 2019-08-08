@@ -27,7 +27,7 @@
      <v-btn fab dark fixed right bottom @click="dialog=!dialog" >
         <v-icon>chat</v-icon>
       </v-btn>
-    <chat :dialog.sync="dialog" ></chat>
+    <chat :dialog="dialog" @changedChatDialog="chatDialog" ></chat>
 
   </div>
 </template>
@@ -49,6 +49,9 @@ export default {
   methods: {
     changedrawer(val){
       this.drawer = val
+    },
+    chatDialog(val){
+      this.dialog = val 
     },
     goUsers() {
       this.$router.push("/users");

@@ -1,7 +1,12 @@
 <template>
   <div>
+    <confirmation
+      :confirm="confirm"
+      @customConfirmEmit="changeConfirm"
+      @deleteDirection="deleteDirection"
+    ></confirmation>
     <v-layout column>
-      <v-card  flat dark class="mx-0">
+      <v-card flat dark class="mx-0">
         <v-layout row>
           <v-card flat>
             <v-card-text class="title">Dessert Data</v-card-text>
@@ -13,7 +18,7 @@
             label="Search"
             class="mt-0"
             hide-details
-            solo  
+            solo
             flat
             color="white"
             single-line
@@ -67,16 +72,20 @@
 </template>
 <script>
 import myForm from "../forms/myForm";
+import confirmation from "@/layout/confirmation";
 export default {
   components: {
-    myForm
+    myForm,
+    confirmation
   },
   data() {
     return {
       index: -1,
       dialog: false,
       search: "",
+      confirm: false,
       dessert: {},
+      // deleteDirection: false ,
       headers: [
         {
           text: "Dessert (100g serving)",
@@ -119,8 +128,11 @@ export default {
     }
   },
   methods: {
-    updatedialog(val){
-      this.dialog = val
+    changeConfirm(val) {
+      this.confirm = val;
+    },
+    updatedialog(val) {
+      this.dialog = val;
     },
     addNewItem() {
       this.index = -1;
@@ -137,14 +149,22 @@ export default {
       // const clone = Object.assign({}, this.getDessert);
     },
     deleteItem(item) {
-      this.$store.dispatch("deleteItemAction", item);
-      this.$toasted.show("Item Deleted", {
-        theme: "outline",
-        position: "bottom-center",
-        duration: 2000,
-        icon: "delete",
-        fitToScreen: true
-      });
+      this.confirm = true;
+      this.dessert = item ;
+    },
+    deleteDirection(val) {
+      // console.log("i am in deleteDirection", val);
+      if (val) {
+        this.$store.dispatch("deleteItemAction", this.dessert).then(() => {
+          this.$toasted.show("Item Deleted", {
+            theme: "outline",
+            position: "bottom-center",
+            duration: 2000,
+            icon: "delete",
+            fitToScreen: true
+          });
+        });
+      }
     }
   }
 };
