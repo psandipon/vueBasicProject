@@ -1,5 +1,5 @@
 import Axios from "axios";
-import {fb} from "@/plugins/firebase";
+import {fb,fs} from "@/plugins/firebase";
 
 import {
   SET_LOGGED_IN,
@@ -36,13 +36,19 @@ const actions = {
       .auth()
       .createUserWithEmailAndPassword(newUser.email, newUser.password)
       .then(
-        function(user) {
-          console.log("user: "+ user)
-          console.log("auth user: "+ newUser)
-          // alert("connected Here ??/");
-          resolve("New User Creater");
+        function(cred) {
+          return fs.collection("users")
+          .doc(cred.user.uid).set({
+            name: newUser.name,
+            email: newUser.email,
+            password: newUser.password,
+            createdAt: new Date(),
+          })
+          
         },
-      )
+      ).then(()=>{
+        resolve("New User Creater");
+      })
       .catch(
           function(err) {
             //alert(err.message);

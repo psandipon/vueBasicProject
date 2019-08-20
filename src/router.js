@@ -6,6 +6,7 @@ import ToolBar from './layout/toolbar.vue';
 import about from './views/pages/about.vue';
 import login from './views/entry/login.vue';
 import signup from './views/entry/signup.vue';
+import { fb } from "@/plugins/firebase";
 
 Vue.use(Router);
 
@@ -39,15 +40,30 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
+  
   if (to.matched.some(record => record.meta.loggedIn)) {
-    if ((localStorage.getItem("loggedIn")).length == 5) {
-      next({
-        path: '/',
-        query: { redirect: to.fullPath }
-      })
-    } else {
-      next()
-    }
+
+    fb.auth().onAuthStateChanged(user =>{
+      if(user){
+        next()
+        console.log("user logged in:", user);
+      }else {
+        console.log("user loogged out");
+        next({
+          path: '/',
+          query: { redirect: to.fullPath }
+        })
+       
+      }
+    })
+    // if ((localStorage.getItem("loggedIn")).length == 5) {
+    //   next({
+    //     path: '/',
+    //     query: { redirect: to.fullPath }
+    //   })
+    // } else {
+    //   next()
+    // }
   } else {
     next() // make sure to always call next()!
   }

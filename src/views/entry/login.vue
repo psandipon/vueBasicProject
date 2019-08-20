@@ -45,7 +45,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-layout column>
-                <v-btn @click="login()"  class="mx-5" color="black white--text">Login</v-btn>
+                <v-btn @click="login()" @keyup.enter="login()"  class="mx-5" color="black white--text">Login</v-btn>
                  <loader   :loader.sync="loader"> </loader>
                 <v-btn @click="goSignUp()" small  flat color="black white--text">New user ? Please SignUp</v-btn>
                 </v-layout>

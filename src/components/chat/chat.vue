@@ -6,50 +6,136 @@
       max-width="25rem"
       transition="slide-y-reverse-transition"
     >
-      <!-- <v-flex d-flex  overflow-hidden style="overflow-y: scroll;"> -->
-        <v-card class="pt-3 pl-3 pr-3 ma-0">
-          <div class="msg_history">
-            <div v-for="(m,i) in allMsg" v-bind:key="m.createdAt.toString()+i">
-              <v-layout column>
-                <v-layout column style="overflow: auto">
-                  <caption :class="getCssClass(m)">{{m.msg}}</caption>
-                  <p :class="getAuthorCssClass(m)">by {{m.author.split("@")[0]}}</p>
+      <v-card>
+        <v-layout row>
+          <v-card-title class="title">Chat Box</v-card-title>
+          <v-spacer></v-spacer>
+          <v-card-title class="caption pa-0">Add New person</v-card-title>
+          <v-btn fab depressed small @click="ps=!ps">
+            <v-icon>add</v-icon>
+          </v-btn>
+        </v-layout>
+      </v-card>
+
+      <v-tabs v-model="active" color="gray" dark slider-color="rgb(159, 159, 159)">
+        <v-tab
+          v-for="n in allChatIDs.length"
+          :key="n"
+          ripple
+        >{{allChatIDs[n-1].email.split("@")[0]}}</v-tab>
+        <!-- <v-tabs-items @change="showActive('in tab items')"> -->
+        <v-tabs-items>
+          <v-tab-item v-for="n in allChatIDs.length" :key="n">
+            <v-card class="pt-3 pl-3 pr-3 ma-0 scroll" height="350" v-chat-scroll>
+              <div v-for="(m,i) in  getChatArray(n)" v-bind:key="'key'.toString()+i">
+                <v-layout column>
+                  <v-layout column style="overflow: auto">
+                    <caption :class="getCssClass(m)">{{m.text}}</caption>
+                    <p :class="getAuthorCssClass(m)">by {{m.author}}</p>
+                  </v-layout>
                 </v-layout>
-              </v-layout>
-            </div>
-          </div>
-          <v-divider class="mt-2 mb-2"></v-divider>
-        </v-card>
-      <!-- </v-flex> -->
+              </div>
+              <v-divider class="mt-2 mb-2"></v-divider>
+            </v-card>
+          </v-tab-item>
+        </v-tabs-items>
+      </v-tabs>
+
       <v-card class="pt-3 pl-3 pr-3 ma-0">
         <v-layout column class="ma-0">
           <v-flex xs12 sm12 md12>
             <v-layout row align-center justify-center>
               <v-icon large color="black">face</v-icon>
-              <p
-                class="subtitle-2"
-                style="margin-bottom: 0px; padding-left:.5rem;"
-              >Welcome to your chat box.</p>
+              <p class="subtitle-2" style="margin-bottom: 0px; padding-left:.5rem;">Type below.</p>
               <v-spacer></v-spacer>
-              <v-btn flat fab small @click="saveMsg">
+              <v-btn class="mr-0" flat round small @click="saveMsg()">
+                <p class="subtitle-2 pr-1 mb-0">send</p>
                 <v-icon>send</v-icon>
               </v-btn>
             </v-layout>
           </v-flex>
+
           <v-flex xs12 sm12 md12>
             <v-textarea
-              @keyup.enter="saveMsg"
+              @keyup.enter="saveMsg()"
               v-model="msg"
               color="black"
-              class="ma-0"
+              class="ma-0 mt-2"
               counter
               flat
               full-width
               box
-              row-height="12"
               solo
+              rows="1"
             ></v-textarea>
           </v-flex>
+        </v-layout>
+      </v-card>
+    </v-dialog>
+
+    <!-- person selection dialog -->
+    <v-dialog
+      v-model="ps"
+      max-width="25rem"
+      content-class="vdialognew"
+      transition="slide-y-reverse-transition"
+    >
+      <v-card>
+        <v-layout column>
+          <v-layout column>
+            <v-layout row>
+              <v-card-title class="title text-uppercase font-weight-light">Choose a person</v-card-title>
+              <v-spacer></v-spacer>
+              <v-btn small flat fab @click="ps=!ps">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-layout>
+            <v-text-field
+              v-model="search"
+              prepend-inner-icon="search"
+              label="Search"
+              class="mt-0"
+              hide-details
+              solo-inverted
+              clearable
+              color="black"
+              single-line
+            ></v-text-field>
+          </v-layout>
+
+          <v-divider></v-divider>
+          <v-layout align-center>
+            <v-card class="scroll" height="550">
+              <v-layout row wrap>
+                <!-- {{getAllUsers}} -->
+                <v-data-table
+                  :headers="headers"
+                  :items="addableUsers"
+                  :search="search"
+                  class="elevation-1"
+                  hide-actions
+                >
+                  <template v-slot:items="props">
+                    <td class="text-xs-center">{{ props.item.name }}</td>
+                    <td class="text-xs-center">{{ props.item.email }}</td>
+                    <td class="text-xs-center">
+                      <v-btn fab flat small class="pt-2 pb-3 ma-0 mr-0">
+                        <v-icon>add</v-icon>
+                      </v-btn>
+                    </td>
+                    <!-- <td class="text-xs-right">{{ props.item.email }}</td>                   -->
+                  </template>
+                  <template v-slot:no-results>
+                    <v-alert
+                      :value="true"
+                      color="error"
+                      icon="warning"
+                    >Your search for "{{ search }}" found no results.</v-alert>
+                  </template>
+                </v-data-table>
+              </v-layout>
+            </v-card>
+          </v-layout>
         </v-layout>
       </v-card>
     </v-dialog>
@@ -59,33 +145,105 @@
 <script>
 import { fs } from "@/plugins/firebase";
 import moment from "moment";
+
 export default {
   name: "privatechat",
-  props: ["dialog"],
+  props: ["dialog", "user"],
   data() {
     return {
+      ps: false,
+      active: 0,
+      offsetTop: 0,
       msg: "",
       allMsg: [],
       chatDialog: false,
-      windowSize: {
-        x: 0,
-        y: 0
-      }
+      allChatIDs: [],
+      search: "",
+      addableUsers: [] ,
+      headers: [
+        { text: "Name", align: "center", sortable: false, value: "name" },
+        { text: "Email", align: "center", sortable: false, value: "email" },
+        { text: "Add", align: "center", sortable: false, value: "add" }
+      ]
     };
   },
-  mounted() {
-    this.onResize();
+  computed: {
+    getAllChats() {
+      this.allChatIDs = this.$store.getters.getAllChats;
+      return allChatIDs;
+    },
+    getAllMsgs() {
+      return this.$store.getters.getAllMsgs;
+    },
+    getAllUsers() {
+      var allUsers = this.$store.getters.getAllUsers;
+      return allUsers;
+      // while (this.allChatIDs.email == ){
+
+      // }
+      // return allUsers.filter((user)=>{
+      //   console.log("++ this.allChatIDs.email",this.allChatIDs)
+      //        console.log("++ user.email",user.email)
+      //    for(var i = 0 ; i < this.allChatIDs.lenght ; i++) {
+      //      console.log("++ this.allChatIDs.email",this.allChatIDs.email)
+      //        console.log("++ user.email",user.email)
+      //      if (this.allChatIDs.email.match(user.email)){
+      //         return false ;
+      //      }
+      //    }
+      //    return true ;
+      //   // console.log("user ->",user)
+      // });
+      // return allUsers ;
+    }
   },
   methods: {
-    onResize() {
-      this.windowSize = { x: window.innerWidth, y: window.innerHeight };
+    getChatArray(n) {
+      // console.log("in getchatarray ", this.allMsg);
+      // console.log("in getchatarray n=", n);
+      if (typeof this.$store.getters.getAllMsgs[n - 1] !== "undefined") {
+        return this.$store.getters.getAllMsgs[n - 1].msg;
+      }
     },
+    initialize() {
+      this.$store.dispatch("fetchAllChats", []).then(chatIDs => {
+        this.allChatIDs = this.$store.getters.getAllChats;
+        this.$store.dispatch("getAllUsers", []).then(users => {
+          this.addableUsers = users.filter(user => {
+            for (var i = 0; i < chatIDs.length; i++) {
+              console.log(i);
+              if (chatIDs[i].email.match(user.email)) {
+                console.log("in if");
+                return false;
+              }
+            }
+            return true;
+          });
+
+        });
+
+        this.$store.dispatch("fetchMsg", this.active).then(() => {
+          this.allMsg = this.$store.getters.getAllMsgs;
+          // console.log(this.getAllMsgs)
+        });
+      });
+    },
+    saveMsg() {
+      //  console.log("in saveMSG then 1-->",this.allMsg)
+      this.$store
+        .dispatch("saveMsg", { active: this.active, msg: this.msg })
+        .then(() => {
+          this.msg = null;
+          // console.log("in saveMSG then 2 -->",this.allMsg)
+        });
+    },
+
+    // CSS class
     getCssClass(m) {
       var cl =
         m.author == localStorage.getItem("userEmail")
           ? "sendchat"
           : "recievedchat";
-      // console.log(cl);
       return cl;
     },
     getAuthorCssClass(m) {
@@ -93,51 +251,19 @@ export default {
         m.author == localStorage.getItem("userEmail")
           ? "sendauthordecor"
           : "recievedauthordecor";
-      // console.log(cl);
       return cl;
-    },
-    saveMsg() {
-      fs.collection("chat")
-        .add({
-          author: localStorage.getItem("userEmail"),
-          msg: this.msg,
-          createdAt: moment(new Date()).format("lll")
-        })
-        .then(() => {
-          this.scrollToBottom();
-        });
-      this.msg = null;
-    },
-    fetchMsg() {
-      //  .log("before:",this.allMsg)
-      // console.log("in MSG methode");
-      fs.collection("chat")
-        .orderBy("createdAt")
-        .onSnapshot(quarySpanshot => {
-          // console.log('quarySpanshot:',quarySpanshot)
-          let allmessages = [];
-          quarySpanshot.docs.forEach(element => {
-            //  console.log("am i here ?? in then")
-            allmessages.push(element.data());
-          });
-          this.allMsg = allmessages;
-          this.allMsg.forEach(ele => {
-            // console.log("---->",ele)
-          });
-        });
-      // .catch(function(error) {
-      //     //console.log("Error getting document:", error);
-      // });
-    },
-    scrollToBottom() {
-      let box = document.querySelector(".msg_history");
-      box.scrollTop = box.scrollHeight;
     }
   },
+
   created: function() {
-    this.fetchMsg();
+    this.initialize();
   },
   watch: {
+    active(val) {
+      this.$store.dispatch("setActive", val).then(() => {
+        // console.log(" active dispatched, active current val is =", val);
+      });
+    },
     chatDialog(val) {
       this.$emit("changedChatDialog", val);
     },
@@ -155,6 +281,22 @@ export default {
   position: absolute;
   bottom: 0;
   right: 0;
+}
+
+::v-deep .scroll::-webkit-scrollbar {
+  width: 3px;
+}
+
+::v-deep .scroll::-webkit-scrollbar-track {
+  background: #ddd;
+}
+
+::v-deep .scroll::-webkit-scrollbar-thumb {
+  background: #aaa;
+}
+
+.scroll {
+  overflow-y: auto;
 }
 
 .sendchat {

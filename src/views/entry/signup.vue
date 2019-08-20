@@ -27,6 +27,14 @@
               <v-card-text>
                 <v-form>
                   <v-text-field
+                    v-model="user.name"
+                    label="Name"
+                    name="name"
+                    prepend-icon="face"
+                    type="text"
+                    color="black"
+                  ></v-text-field>
+                  <v-text-field
                     v-model="user.email"
                     label="Email"
                     name="email"
@@ -79,6 +87,7 @@ export default {
       text: "snackbar text",
       color:"",
       user: {
+        name: "",
         password: "",
         email: "",
       }
