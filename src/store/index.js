@@ -7,11 +7,12 @@ import login from "./login_module/login";
 import signup from "./login_module/signup";
 import users from "./user_module/users";
 import chat from "./chat/chat";
+import books from "./ecom/books";
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-  modules: { dessert,login,signup,users,chat }
+  modules: { dessert,login,signup,users,chat,books }
 });
 
 export default store;

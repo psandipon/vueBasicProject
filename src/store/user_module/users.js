@@ -85,7 +85,7 @@ const actions = {
           }
         })
         .catch(function(error) {
-          // console.log(error);
+          console.log(error);
           //toastMessage('negative', failedMsg)
         //   commit("UNSET_LOGGED_IN");
           reject();

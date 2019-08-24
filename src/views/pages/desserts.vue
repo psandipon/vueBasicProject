@@ -1,5 +1,6 @@
 <template>
   <div  class="about mt-5">
+
    <v-card class="mx-5">
      <v-card-text> 
       <dessertTable> </dessertTable>
@@ -11,10 +12,17 @@
 <script>
 import dessertTable from "@/components/tables/dessert_table";
 
+
 export default {
+   data() {
+    return {
+      // photos: [],
+    };
+  },
   components: {
     dessertTable,
-    }
+    },
+    
 };
 </script>
 <style scoped>

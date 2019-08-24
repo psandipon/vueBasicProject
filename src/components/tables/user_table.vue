@@ -101,7 +101,11 @@ export default {
     };
   },
   created: function () {
-    this.$store.dispatch('fetchUsersAction')
+    this.$store.dispatch('fetchUsersAction').then((res)=>{
+
+    }).catch((res)=>{
+      console.log("error in useer table's created: function ")
+    })
   },
   computed: {
     getUsers() {

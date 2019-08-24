@@ -12,7 +12,8 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn @click="goDesserts()" class="grey darken-3 white--text">desserts</v-btn>
-      <v-btn @click="goUsers()" class="grey darken-3 white--text">users</v-btn>
+      <v-btn @click="goEcommerce()" class="grey darken-3 white--text">ecommerce</v-btn>
+      <!-- <v-btn @click="goUsers()" class="grey darken-3 white--text">users</v-btn> -->
       <v-btn @click="goAbout()" class="grey darken-3 white--text">About</v-btn>
       <v-divider class="mx-4" vertical></v-divider>
       <v-btn @click="signOut()" class="grey darken-3 white--text">
@@ -62,6 +63,9 @@ export default {
     },
     goUsers() {
       this.$router.push("/users");
+    },
+    goEcommerce() {
+      this.$router.push("/ecommerce");
     },
     goDesserts() {
       this.$router.push("/desserts");

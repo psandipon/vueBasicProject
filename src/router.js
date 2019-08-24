@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import desserts from "./views/pages/desserts.vue";
 import users from "./views/pages/users.vue";
+import ecommerce from "./views/pages/ecommerce.vue";
 import ToolBar from './layout/toolbar.vue';
 import about from './views/pages/about.vue';
 import login from './views/entry/login.vue';
@@ -29,6 +30,9 @@ const router = new Router({
         },
         { 
           path: 'users', component: users, meta: {loggedIn: true}
+        },
+        { 
+          path: 'ecommerce', component: ecommerce, meta: {loggedIn: true}
         },
         { 
           path: 'about', component: about, meta: {loggedIn: true}
